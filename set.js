@@ -53,9 +53,10 @@ if (Object.getOwnPropertyNames(set).length == 0) {
 			};
 		};
 
-		// Create a global, shuffled deck for us to use
+		// Returns a freshly shuffled deck of Card objects
 		set.Deck = function () {
-			var types = this.types;
+			var types = this.types,
+				Card = this.Card;
 
 			// Borrowed from http://stackoverflow.com/questions/15298912/javascript-generating-combinations-from-n-arrays-with-m-elements
 			function cartesian() {
@@ -96,14 +97,37 @@ if (Object.getOwnPropertyNames(set).length == 0) {
 				return array;
 			}
 
-			// Take the cartesian product of the type arrays, map it to our Card function to create the deck, and then shuffle it
-			return shuffle(
-				cartesian(types.shape, types.color, types.shading, types.number).map( // Take the cartesian product of our types
-					function (el, i, arr) { 										// then map that array
-						return set.Card({ 'shape': el[0], 'color': el[1], 'shading': el[2], 'number': el[3] }); // to an array of Cards
-					},
-				this)
-			); // then shuffle the deck
+			// Take the cartesian product of the type arrays, map it to our Card function to create the deck
+			
+			var cards = cartesian(types.shape, types.color, types.shading, types.number) // Take the cartesian product of our types
+					.map(function (el) { // then map that array of all possible combinations
+						return Card({ 'shape': el[0], 'color': el[1], 'shading': el[2], 'number': el[3] }); // to our Cards
+					}, this);
+
+			return {
+				'length': function () { return cards.length },
+				'draw': function (num) {
+					function generateArray(n) {
+						var arr = [];
+						for (var i = 0; i < n; i++) {
+							arr.push(undefined);
+						};
+
+						return arr;
+					}
+
+					if (cards.length > 0){
+						return generateArray(num).map(function () { return cards.pop(); }, this);
+					}
+					else {
+						return [];
+					}
+				},
+				'shuffle': function () {
+					cards = shuffle(cards);
+					return true;
+				}
+			}
 		};
 
 
