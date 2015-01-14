@@ -42,7 +42,7 @@
 	});
 
 	QUnit.test('deck', function (assert) {
-		var deck = set.Deck;
+		var deck = set.Deck();
 
 		equal(deck.length, 81, "81 cards generated");
 	});

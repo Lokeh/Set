@@ -54,9 +54,8 @@ if (Object.getOwnPropertyNames(set).length == 0) {
 		};
 
 		// Create a global, shuffled deck for us to use
-		set.Deck = (function () {
-			var deck = Array(81),
-				types = set.types;
+		set.Deck = function () {
+			var types = this.types;
 
 			// Borrowed from http://stackoverflow.com/questions/15298912/javascript-generating-combinations-from-n-arrays-with-m-elements
 			function cartesian() {
@@ -101,22 +100,26 @@ if (Object.getOwnPropertyNames(set).length == 0) {
 			return shuffle(cartesian(types.shape, types.color, types.shading, types.number).map(function (el, i, arr) {
 				return set.Card({ 'shape': el[0], 'color': el[1], 'shading': el[2], 'number': el[3] });
 			}, this));
-		})();
+		};
 
 
 		// Check if 3 cards make a set
 		set.check = function (cards) { // cards = Cards[3]
 			if (cards.length !== 3) return undefined;
 
-			var typeSets = [],
-				types = set.types;
+			// var typeSets = [],
+			var types = this.types;
 
-			Object.keys(this.Card({})).forEach(function (type) {
-				typeSets.push([cards[0][type], cards[1][type], cards[2][type]]);
-			});
+			// Object.keys(this.Card({})).forEach(function (type) {
+			// 	typeSets.push([cards[0][type], cards[1][type], cards[2][type]]);
+			// });
 
-			return typeSets.every(function (el) {
-				return types.match(el);
+			// Obtain an array of all types by looking at the keys of an empty card
+			return Object.keys(this.Card({})).map(function (type) { // then map each type
+				return [cards[0][type], cards[1][type], cards[2][type]]; // to an array of each cards value for that type
+				// e.g. [ ["blue","red","purple"], [1,1,2], ... ]
+			}).every(function (el) { // then return a boolean value whether each type set
+				return types.match(el); // is a match (completely distinct, or all equal)
 			});
 		};
 	})();
