@@ -6,6 +6,33 @@ if (Object.getOwnPropertyNames(set).length == 0) {
 	(function () {
 		"use strict";
 
+		function generateArray(n) { // generate an array of size n with `undefined` fill 
+			var arr = [];
+			for (var i = 0; i < n; i++) {
+				arr.push(undefined);
+			};
+			return arr;
+		}
+
+		// Borrowed from http://stackoverflow.com/questions/15298912/javascript-generating-combinations-from-n-arrays-with-m-elements
+		function cartesian() {
+			var r = [], arg = arguments, max = arg.length-1;
+			function helper(arr, i) {
+				for (var j=0, l=arg[i].length; j<l; j++) {
+					var a = arr.slice(0); // clone arr
+					a.push(arg[i][j])
+					if (i==max) {
+						r.push(a);
+					}
+					else {
+						helper(a, i+1);
+					}
+				}
+			}
+			helper([], 0);
+			return r;
+		}
+
 		set.types = {
 			'shape': ["oval", "squiggle", "diamond"],
 			'color': ["red", "green", "purple"],
@@ -58,25 +85,6 @@ if (Object.getOwnPropertyNames(set).length == 0) {
 			var types = this.types,
 				Card = this.Card;
 
-			// Borrowed from http://stackoverflow.com/questions/15298912/javascript-generating-combinations-from-n-arrays-with-m-elements
-			function cartesian() {
-				var r = [], arg = arguments, max = arg.length-1;
-				function helper(arr, i) {
-					for (var j=0, l=arg[i].length; j<l; j++) {
-						var a = arr.slice(0); // clone arr
-						a.push(arg[i][j])
-						if (i==max) {
-							r.push(a);
-						}
-						else {
-							helper(a, i+1);
-						}
-					}
-				}
-				helper([], 0);
-				return r;
-			}
-
 			// Fisher-Yates shuffle. Borrowed from http://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 			function shuffle(array) {
 				var currentIndex = array.length, temporaryValue, randomIndex ;
@@ -100,32 +108,25 @@ if (Object.getOwnPropertyNames(set).length == 0) {
 			// Take the cartesian product of the type arrays, map it to our Card function to create the deck
 			
 			var cards = cartesian(types.shape, types.color, types.shading, types.number) // Take the cartesian product of our types
-					.map(function (el) { // then map that array of all possible combinations
-						return Card({ 'shape': el[0], 'color': el[1], 'shading': el[2], 'number': el[3] }); // to our Cards
-					}, this);
+				.map(function (el) { // then map that array of all possible combinations
+					return Card({ 'shape': el[0], 'color': el[1], 'shading': el[2], 'number': el[3] }); // to our Cards
+				}, this);
 
 			return {
 				'length': function () { return cards.length },
-				'draw': function (num) {
-					function generateArray(n) {
-						var arr = [];
-						for (var i = 0; i < n; i++) {
-							arr.push(undefined);
-						};
+				'draw': function (num) { // draws up to `num` cards from the deck
+					num = num | 1; // if called w/o arg, draw 1 card
 
-						return arr;
-					}
-
-					if (cards.length > 0){
-						return generateArray(num).map(function () { return cards.pop(); }, this);
+					if (cards.length > 0) { // our deck is still full
+						return generateArray(num).map(function () { return cards.pop(); }, this); // pop the cards off the deck and return them in an array
 					}
 					else {
-						return [];
+						return []; // return an empty array
 					}
 				},
-				'shuffle': function () {
+				'shuffle': function () { // shuffle the deck
 					cards = shuffle(cards);
-					return true;
+					return this;
 				}
 			}
 		};
