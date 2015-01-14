@@ -3,30 +3,30 @@
 
 	QUnit.test('set checking', function (assert) {
 		var table = [
-				{
+				set.Card({
 					'color': "green",
 					'number': 3,
 					'shading': "solid",
 					'shape': "oval"
-				},
-				{
+				}),
+				set.Card({
 					'color': "red",
 					'number': 3,
 					'shading': "solid",
 					'shape': "diamond"
-				},
-				{
+				}),
+				set.Card({
 					'color': "purple",
 					'number': 3,
 					'shading': "solid",
 					'shape': "squiggle"
-				},
-				{
+				}),
+				set.Card({
 					'color': "purple",
 					'number': 2,
 					'shading': "solid",
 					'shape': "squiggle"
-				}
+				})
 		];
 
 		ok(set.check([

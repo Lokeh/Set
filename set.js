@@ -97,9 +97,13 @@ if (Object.getOwnPropertyNames(set).length == 0) {
 			}
 
 			// Take the cartesian product of the type arrays, map it to our Card function to create the deck, and then shuffle it
-			return shuffle(cartesian(types.shape, types.color, types.shading, types.number).map(function (el, i, arr) {
-				return set.Card({ 'shape': el[0], 'color': el[1], 'shading': el[2], 'number': el[3] });
-			}, this));
+			return shuffle(
+				cartesian(types.shape, types.color, types.shading, types.number).map( // Take the cartesian product of our types
+					function (el, i, arr) { 										// then map that array
+						return set.Card({ 'shape': el[0], 'color': el[1], 'shading': el[2], 'number': el[3] }); // to an array of Cards
+					},
+				this)
+			); // then shuffle the deck
 		};
 
 
