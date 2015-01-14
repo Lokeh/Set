@@ -45,6 +45,9 @@
 		var deck = set.Deck();
 
 		equal(deck.length(), 81, "81 cards generated");
-		//equal(deck.)
+
+		// Tests for: 	deck creation order stability
+		//				deck draw
+		//				deck shuffle
 	});
 })();
