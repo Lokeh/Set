@@ -6,14 +6,6 @@ if (Object.getOwnPropertyNames(set).length == 0) {
 	(function () {
 		"use strict";
 
-		function generateArray(n) { // generate an array of size n with `undefined` fill 
-			var arr = [];
-			for (var i = 0; i < n; i++) {
-				arr.push(undefined);
-			};
-			return arr;
-		}
-
 		// Borrowed from http://stackoverflow.com/questions/15298912/javascript-generating-combinations-from-n-arrays-with-m-elements
 		function cartesian() {
 			var r = [], arg = arguments, max = arg.length-1;
@@ -118,7 +110,7 @@ if (Object.getOwnPropertyNames(set).length == 0) {
 					num = num | 1; // if called w/o arg, draw 1 card
 
 					if (cards.length > 0) { // our deck is still full
-						return generateArray(num).map(function () { return cards.pop(); }, this); // pop the cards off the deck and return them in an array
+						return Array.apply(null, Array(num)).map(function () { return cards.pop(); }, this); // pop the cards off the deck and return them in an array
 					}
 					else {
 						return []; // return an empty array
