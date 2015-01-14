@@ -111,12 +111,7 @@ if (Object.getOwnPropertyNames(set).length == 0) {
 		set.check = function (cards) { // cards = Cards[3]
 			if (cards.length !== 3) return undefined;
 
-			// var typeSets = [],
 			var types = this.types;
-
-			// Object.keys(this.Card({})).forEach(function (type) {
-			// 	typeSets.push([cards[0][type], cards[1][type], cards[2][type]]);
-			// });
 
 			// Obtain an array of all types by looking at the keys of an empty card
 			return Object.keys(this.Card({})).map(function (type) { // then map each type
