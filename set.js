@@ -98,7 +98,6 @@ if (Object.getOwnPropertyNames(set).length == 0) {
 			}
 
 			// Take the cartesian product of the type arrays, map it to our Card function to create the deck
-			
 			var cards = cartesian(types.shape, types.color, types.shading, types.number) // Take the cartesian product of our types
 				.map(function (el) { // then map that array of all possible combinations
 					return Card({ 'shape': el[0], 'color': el[1], 'shading': el[2], 'number': el[3] }); // to our Cards

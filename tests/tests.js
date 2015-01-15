@@ -46,8 +46,10 @@
 
 		equal(deck.length(), 81, "81 cards generated");
 
-		// Tests for: 	deck creation order stability
-		//				deck draw
-		//				deck shuffle
+		var deck1 = set.Deck(), deck2 = set.Deck();
+		deepEqual(deck1.draw(), deck2.draw(), "New decks are always equal.")
+		
+		deck1 = set.Deck().shuffle(), deck2 = set.Deck().shuffle();
+		notDeepEqual(deck1.draw(), deck2.draw(), "Shuffled decks are (probably) distinct.")
 	});
 })();
